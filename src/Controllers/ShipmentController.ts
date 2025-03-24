@@ -10,6 +10,16 @@ export class ShipmentController {
         }
     }
 
+    static async getEnviosIdUser(req: Request, res: Response): Promise<void> {
+        try {
+            const {id} = req.params
+            const result = await ShipmentRepository.getShipmentsUser(parseInt(id));
+            res.json(result);
+        } catch (error) {
+            res.status(500).json({ message: "Error al obtener envíos", error });
+        }
+    }
+
     static async postEnviosUser(req: Request, res: Response): Promise<void> {
         try {
             const { id } = req.params; // Obtener ID desde la URL

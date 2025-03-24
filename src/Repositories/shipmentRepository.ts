@@ -9,6 +9,11 @@ export class ShipmentRepository {
     return result;
   }
 
+  static async getShipmentsUser(id:number): Promise<RowDataPacket[]> {
+    const [result] = await pool.query<RowDataPacket[]>("SELECT * FROM envios WHERE user_id = ?",[id]);
+    return result;
+  }
+
   static async postShipments(userId: number,peso: number,dimension: string,tipoProducto: string,direccionDestino: string,ciudad: string,estado:string):Promise<number>{
     const [result] = await pool.query<ResultSetHeader>(
       "INSERT INTO envios (user_id, peso, dimension, tipo_producto, direccion_destino, ciudad, estado)VALUES (?,?,?,?,?,?,?)",

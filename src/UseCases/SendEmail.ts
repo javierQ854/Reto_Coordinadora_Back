@@ -1,15 +1,22 @@
-// src/application/use-cases/SendEmail.ts
-import { Email } from "../Domain/Email";
-import { EmailService } from "../Infraestructure/Services/EmailService"; 
+import { IEmailService } from "../Domain/IEmailService";
+import { generarPlantillaCorreo } from "../Utils/EmailTemplate";
 
 export class SendEmail {
-  private emailService: EmailService;
+  constructor(private emailService: IEmailService) {}
 
-  constructor(emailService: EmailService) {
-    this.emailService = emailService;
-  }
-
-  async execute(emailData: Email): Promise<void> {
-    return await this.emailService.send(emailData);
+  async execute(emailData: {
+    to: string;
+    subject: string;
+    datos: {
+      peso: number;
+      dimension: string;
+      tipoProducto: string;
+      direccionDestino: string;
+      ciudad: string;
+      estado: string;
+    };
+  }): Promise<void> {
+    const emailBody = generarPlantillaCorreo(emailData.datos);
+    await this.emailService.sendEmail(emailData.to, emailData.subject, emailBody);
   }
 }

@@ -1,13 +1,21 @@
-// src/domain/Email.ts
 export class Email {
-    to: string;
-    subject: string;
-    body: string;
-  
-    constructor({ to, subject, body }: { to: string; subject: string; body: string }) {
-      this.to = to;
-      this.subject = subject;
-      this.body = body;
-    }
+  to: string;
+  peso: number;
+  dimension: string;
+  tipoProducto: string;
+  direccionDestino: string;
+  ciudad: string;
+  estado: string;
+
+  constructor(data: any) {
+    this.to = data.to;
+    this.peso = data.peso;
+    this.dimension = data.dimension;
+    this.tipoProducto = data.tipoProducto;
+    this.direccionDestino = data.direccionDestino;
+    this.ciudad = data.ciudad;
+    this.estado = data.estado;
   }
+}
+
   

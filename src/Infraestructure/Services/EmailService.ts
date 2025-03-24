@@ -1,33 +1,23 @@
-// src/infrastructure/services/EmailService.ts
+import { IEmailService } from "../../Domain/IEmailService";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
-import { Email } from "../../Domain/Email";
+dotenv.config(); 
 
-dotenv.config();
+export class EmailService implements IEmailService {
+  private transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
 
-export class EmailService {
-  private transporter;
-
-  constructor() {
-    this.transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
+  async sendEmail(to: string, subject: string, body: string): Promise<void> {
+    await this.transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to,
+      subject,
+      html: body, 
     });
   }
-
-  async send(email: Email): Promise<void> {
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: email.to,
-      subject: email.subject,
-      text: email.body,
-    };
-
-    await this.transporter.sendMail(mailOptions);
-  }
 }
-
-export const emailService = new EmailService();

@@ -1,11 +1,24 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import pool from "../Database/database";
-import bcrypt from "bcryptjs";
+
 
 export class ShipmentRepository {
   
   static async getShipments(): Promise<RowDataPacket[]> {
-    const [result] = await pool.query<RowDataPacket[]>("SELECT * FROM envios");
+    const [result] = await pool.query<RowDataPacket[]>(`SELECT 
+    e.id_envio,
+    u.name AS nombre_usuario,
+    e.peso,
+    e.dimension,
+    e.tipo_producto,
+    e.direccion_destino,
+    e.ciudad,
+    e.estado,
+    e.estado_envio,
+    e.created_at,
+    e.ruta_id
+FROM envios e
+JOIN users u ON e.user_id = u.id;`);
     return result;
   }
 

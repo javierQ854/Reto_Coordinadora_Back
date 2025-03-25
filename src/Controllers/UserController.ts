@@ -21,7 +21,6 @@ export class UserController {
     }
     static async login(req: Request, res: Response): Promise<void> {
         try {
-            // 🔹 Desestructuración correcta de `req.body`
             const { email, password } = req.body;
     
             if (!email || !password) {
@@ -29,20 +28,17 @@ export class UserController {
                 return
             }
     
-            // 🔹 Obtener usuario de la base de datos
             const user = await userRepository.getUserByEmail(email);
             if (user.length === 0) {
                 res.status(400).json({ error: "Invalid credentials" });
                 return
             }
-    
-            // 🔹 Comparar contraseñas
             const validPassword = await bcrypt.compare(password, user[0].password);
             if (!validPassword) {
                 res.status(401).json({ error: "Invalid credentials" });
                 return
             }
-            
+
             const token = JwtUtils.generateToken(user[0].id, user[0].role);
             res.json({ message: "Login successful", token });
     
@@ -51,5 +47,7 @@ export class UserController {
             return
         }
     }
+
+    
     
 }
